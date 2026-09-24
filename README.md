@@ -1,4 +1,4 @@
-# Personalization and Concept Editing of Text-to-Image Diffusion Models
+# PersonGen: Preserving Knowledge While Personalizing Diffusion Models
 
 [![License](https://badgen.net/github/license/kisnikser/m1p-template?color=green)](LICENSE)
 
@@ -9,11 +9,11 @@
 </tr>
 <tr>
 <td><b>Consultant</b></td>
-<td>TODO</td>
+<td>Sergey Karpukhin</td>
 </tr>
 <tr>
 <td><b>Advisor</b></td>
-<td>TODO</td>
+<td>Aibek Alanov</td>
 </tr>
 </table>
 
@@ -74,7 +74,7 @@ Evaluation focuses on:
 
 ```bibtex
 @article{peskova2026personalgen,
-  title={Personalization and Concept Editing of Text-to-Image Diffusion Models},
+  title={PersonGen: Preserving Knowledge While Personalizing Diffusion Models},
   author={Karina Peskova},
   year={2026}
 }
