@@ -1,27 +1,71 @@
-# Personalization of Text-to-Image Diffusion Models
+# PersonGen: Knowledge-Preserving Personalization of Diffusion Models
 
-This repository contains the thesis project of **Karina Peskova**.
+[![License](https://badgen.net/github/license/kisnikser/m1p-template?color=green)](LICENSE)
 
-The project focuses on personalization of text-to-image diffusion models using **knowledge editing techniques**. The main goal is to study whether a new visual concept can be inserted into a pretrained diffusion model by directly modifying a limited subset of its parameters, instead of fully fine-tuning the model.
+<table>
+    <tr>
+        <td align="left"> <b> Author </b> </td>
+        <td> Karina Peskova </td>
+    </tr>
+    <tr>
+        <td align="left"> <b> Consultant </b> </td>
+        <td> Sergey Karpukhin </td>
+    </tr>
+    <tr>
+        <td align="left"> <b> Advisor </b> </td>
+        <td> Aibek Alanov </td>
+    </tr>
+</table>
 
-## Main Idea
+## Assets
 
-Standard personalization methods such as DreamBooth or LoRA usually require additional training. In this project, we investigate an alternative approach based on **model editing**.
+- [LinkReview](LINKREVIEW.md)
+- [Code](code)
+- [Paper](paper/main.pdf)
+- [Slides](slides/main.pdf)
+
+## Abstract
+
+This research project studies personalization and concept editing of
+text-to-image diffusion models.
+
+The goal of the work is to investigate how a pretrained diffusion model
+can learn new visual concepts while preserving previously acquired knowledge.
+
+We combine DreamBooth LoRA personalization with AlphaEdit-based editing
+methods and analyze the role of cross-attention parameters in concept transfer.
 
 ## Research Questions
 
-The project studies several questions related to diffusion model personalization:
+- How is personalized concept information stored inside diffusion models?
+- Can editing methods preserve pretrained model knowledge after personalization?
+- Are cross-attention key/value matrices sufficient for concept transfer?
 
-* Can model editing replace or approximate LoRA-based personalization?
-* Which model parameters are responsible for storing personalized visual concepts?
-* How does the choice of concept identifier affect personalization quality?
-* How does prior model knowledge interfere with newly introduced concepts?
-* How can projection-based editing be relaxed to preserve both old and new knowledge?
+## Method
 
-## Model
+The proposed pipeline includes:
 
-**Stable Diffusion v1.4** and the Hugging Face `diffusers` framework.
+1. DreamBooth LoRA fine-tuning of Stable Diffusion.
+2. Extraction of cross-attention key/value matrices.
+3. Construction of concept embedding representations.
+4. AlphaEdit-based model editing.
+5. Evaluation of generated images and preservation of original capabilities.
 
-## Repository Structure
+## Experiments
 
--
+Experiments include:
+
+- different textual identifiers;
+- LoRA training checkpoints;
+- learning rate selection;
+- AlphaEdit parameters;
+- interpolation between LoRA and edited weights.
+
+## Citation
+
+```bibtex
+@article{peskova2026personalization,
+  title={PersonGen: Knowledge-Preserving Personalization of Diffusion Models},
+  author={Karina Peskova},
+  year={2026}
+}
