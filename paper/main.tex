@@ -1,0 +1,294 @@
+\documentclass{article}
+
+\PassOptionsToPackage{numbers, sort, compress}{natbib}
+\usepackage[main,final]{neurips_2025}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{xcolor}
+
+\usepackage{subcaption}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsthm}
+\usepackage{mathrsfs}
+\usepackage{textcomp}
+\usepackage{manyfoot}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{listings}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}{Definition}
+\newtheorem{assumption}{Assumption}
+
+
+\title{PersonGen: Knowledge-Preserving Personalization of Text-to-Image Diffusion Models}
+
+
+\author{
+  Karina Peskova\\
+  Lomonosov Moscow State University\\
+  Moscow, Russia\\
+  \texttt{email@example.com}\\
+}
+
+
+\begin{document}
+
+\maketitle
+
+
+\begin{abstract}
+
+Recent text-to-image diffusion models demonstrate remarkable generative
+capabilities but require adaptation to generate personalized concepts.
+Fine-tuning approaches such as DreamBooth and LoRA allow efficient
+personalization, but may alter previously learned knowledge and reduce
+generalization ability.
+
+In this work, we study the problem of knowledge-preserving personalization
+of text-to-image diffusion models. We combine LoRA-based personalization
+with AlphaEdit-inspired model editing methods and investigate how personalized
+concept information is represented inside diffusion models.
+
+We analyze the contribution of cross-attention key/value parameters to concept
+transfer and study whether editing these components is sufficient for preserving
+the original model capabilities while introducing new visual concepts.
+
+\end{abstract}
+
+
+\textbf{Keywords:} text-to-image diffusion models, personalization, LoRA,
+DreamBooth, model editing, Stable Diffusion, knowledge preservation
+
+
+\section{Introduction}\label{sec:intro}
+
+Text-to-image diffusion models have recently achieved impressive results in
+high-quality image generation. However, adapting these models to new concepts,
+objects, or subjects remains a challenging problem. A personalized model should
+learn the target concept while preserving the knowledge acquired during
+pretraining.
+
+Existing personalization methods, such as DreamBooth and LoRA, efficiently
+adapt pretrained diffusion models using a small number of images. However,
+fine-tuning can introduce unintended modifications and reduce the ability of
+the model to generate previously learned concepts.
+
+An alternative direction is model editing, where model parameters are modified
+in a constrained manner to introduce new knowledge while minimizing changes to
+the original model. This work investigates whether such approaches can be
+combined with personalization methods for more controlled concept transfer.
+
+The main goal of this research is to analyze how personalized concepts are
+stored in text-to-image diffusion models and whether knowledge-preserving
+editing methods can improve personalization quality.
+
+\textbf{Contributions.} Our contributions can be summarized as follows:
+
+\begin{itemize}
+    \item We develop a pipeline combining DreamBooth LoRA personalization with
+    AlphaEdit-based model editing for Stable Diffusion models.
+    
+    \item We analyze the role of cross-attention key/value matrices in storing
+    personalized concepts.
+    
+    \item We perform ablation studies over textual identifiers, LoRA training
+    parameters, checkpoints, and editing configurations.
+    
+    \item We investigate the trade-off between concept strength and preservation
+    of pretrained model knowledge.
+\end{itemize}
+
+
+\textbf{Outline.}
+The rest of the paper is organized as follows.
+Section~\ref{sec:rw} describes related work.
+Section~\ref{sec:prelim} introduces preliminary concepts.
+Section~\ref{sec:method} presents the proposed approach.
+Section~\ref{sec:exp} describes experimental evaluation.
+Section~\ref{sec:disc} discusses the obtained results.
+
+
+\section{Related Work}\label{sec:rw}
+
+
+\textbf{Text-to-image personalization.}
+
+Personalization methods adapt pretrained diffusion models to generate specific
+subjects or concepts using a limited number of examples. DreamBooth introduces
+subject-driven generation by fine-tuning model parameters, while LoRA provides
+a parameter-efficient alternative by learning low-rank updates.
+
+
+\textbf{Knowledge-preserving model editing.}
+
+Model editing methods aim to modify neural networks while minimizing unwanted
+changes to existing knowledge. AlphaEdit introduces constrained editing
+strategies that project parameter updates into subspaces preserving previous
+model behavior.
+
+
+\textbf{Concept representation in diffusion models.}
+
+Previous studies analyze how textual representations and attention mechanisms
+affect image generation. In this work, we focus on cross-attention key/value
+matrices and their role in transferring personalized concepts.
+
+
+\section{Preliminaries}\label{sec:prelim}
+
+
+\subsection{General notation}
+
+Let $M_0$ denote a pretrained Stable Diffusion model and $M_p$ denote a
+personalized model obtained after fine-tuning.
+
+The LoRA personalization process can be represented as:
+
+\[
+W_{LoRA}=W_0+\Delta W ,
+\]
+
+where $W_0$ is the original parameter matrix and $\Delta W$ is a low-rank
+adaptation.
+
+
+\subsection{Assumptions}
+
+We assume that:
+
+\begin{itemize}
+    \item the pretrained diffusion model contains general visual knowledge;
+    \item personalization modifies only a subset of model parameters;
+    \item cross-attention layers play an important role in connecting textual
+    representations with visual concepts.
+\end{itemize}
+
+
+\section{Method}\label{sec:method}
+
+
+The proposed pipeline consists of several stages.
+
+\subsection{LoRA personalization}
+
+First, DreamBooth LoRA fine-tuning is performed to learn a new visual concept
+from a small image dataset. A special identifier token is introduced to represent
+the personalized concept.
+
+
+\subsection{Attention parameter extraction}
+
+After personalization, cross-attention key and value projection matrices are
+extracted from the diffusion model.
+
+These matrices are analyzed as possible carriers of personalized information.
+
+
+\subsection{Text representation analysis}
+
+We construct text embedding matrices corresponding to:
+
+\begin{itemize}
+    \item identifier tokens;
+    \item content words;
+    \item all valid tokens.
+\end{itemize}
+
+
+\subsection{AlphaEdit-based modification}
+
+The extracted representations are used to compute constrained parameter updates.
+The goal is to transfer the personalized concept while minimizing changes to
+the original model.
+
+
+\section{Experiments}\label{sec:exp}
+
+
+We conduct experiments using Stable Diffusion v1-4.
+
+The experimental evaluation includes:
+
+\begin{itemize}
+    \item comparison of different identifier tokens;
+    \item LoRA checkpoint analysis;
+    \item learning rate ablations;
+    \item comparison of different text representation strategies;
+    \item interpolation between LoRA and edited weights.
+\end{itemize}
+
+
+For interpolation experiments we define:
+
+\[
+W(\alpha)=(1-\alpha)W_{edit}+\alpha W_{LoRA},
+\]
+
+where $\alpha=0$ corresponds to the edited model and $\alpha=1$ corresponds
+to the original LoRA personalization.
+
+
+Evaluation is performed using generated image comparisons and analysis of
+concept preservation.
+
+
+\section{Discussion}\label{sec:disc}
+
+
+The experiments demonstrate that personalized information is distributed across
+multiple components of diffusion models.
+
+Although modifying cross-attention parameters can transfer part of the concept,
+the full personalization behavior cannot always be recovered using only
+key/value matrices.
+
+This suggests that successful personalization requires considering a broader set
+of parameters responsible for concept representation.
+
+
+\section{Conclusion}\label{sec:concl}
+
+
+In this work, we investigate knowledge-preserving personalization of
+text-to-image diffusion models.
+
+We propose a research pipeline combining DreamBooth LoRA personalization and
+AlphaEdit-based editing. Our analysis provides insights into the localization
+of personalized knowledge inside diffusion models and the challenges of
+performing controlled concept transfer.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+
+
+\newpage
+\appendix
+
+\section{Appendix / supplemental material}\label{app}
+
+
+\subsection{Additional experiments / Proofs of Theorems}\label{app:exp}
+
+
+Additional experimental results, generated image grids, and ablation studies
+are provided in the supplementary material.
+
+
+\end{document}

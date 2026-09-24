@@ -1,0 +1,422 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage{cmap}
+\usepackage{tikz}
+\usepackage{array}
+\usepackage{multicol}
+\usepackage{booktabs}
+\usepackage{csquotes}
+\usepackage{amssymb,amsfonts,amsmath}
+\usepackage{graphicx}
+
+\usecolortheme{beaver}
+\usefonttheme[onlymath]{serif}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[page number]
+\setbeamertemplate{blocks}[rounded=true,shadow=true]
+\setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+
+\setbeamerfont{author}{size=\normalsize}
+\setbeamerfont{institute}{size=\normalsize}
+\setbeamerfont{date}{size=\normalsize}
+
+
+\title{PersonalGen: Knowledge-Preserving Personalization of\\
+Text-to-Image Diffusion Models}
+
+\author{
+    Karina Peskova\\
+    Consultant: Name Surname, PhD/DSc\\
+    Advisor: Name Surname, PhD/DSc
+}
+
+\institute{
+    Diploma Research Project\\
+    Lomonosov Moscow State University
+}
+
+\date{2026}
+
+
+\begin{document}
+
+
+%------------------------------------------------
+
+\begin{frame}
+    \thispagestyle{empty}
+    \maketitle
+\end{frame}
+
+
+%------------------------------------------------
+
+\begin{frame}{Personalization of Diffusion Models}
+
+Text-to-image diffusion models demonstrate impressive generation quality,
+but adapting them to new concepts remains challenging.
+
+\begin{block}{Goal}
+Investigate how personalized concepts are represented inside diffusion models
+and develop a knowledge-preserving personalization pipeline.
+\end{block}
+
+
+\begin{block}{Problem}
+Fine-tuning methods such as DreamBooth LoRA can learn new concepts,
+but may overwrite previously acquired knowledge.
+\end{block}
+
+
+\begin{block}{Solution}
+We combine personalization and model editing approaches:
+
+\begin{enumerate}[1)]
+    \item Train a personalized LoRA adapter.
+    \item Analyze cross-attention representations.
+    \item Apply AlphaEdit-based constrained editing.
+\end{enumerate}
+
+\end{block}
+
+\end{frame}
+
+
+%------------------------------------------------
+
+\begin{frame}{Research Motivation}
+
+\begin{columns}
+
+\begin{column}{0.55\textwidth}
+
+Modern diffusion models contain billions of parameters and store complex
+visual knowledge.
+
+The main research questions:
+
+\begin{enumerate}[1)]
+    \item Where is personalized concept information stored?
+    \item Are cross-attention layers sufficient for concept transfer?
+    \item How can we preserve pretrained knowledge?
+\end{enumerate}
+
+\end{column}
+
+
+\begin{column}{0.45\textwidth}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.85\textwidth]{example-image}
+\caption{Text-to-image diffusion pipeline}
+\end{figure}
+
+\end{column}
+
+\end{columns}
+
+\end{frame}
+
+
+%------------------------------------------------
+
+\begin{frame}{Problem Statement}
+
+
+Given a pretrained diffusion model:
+
+\[
+M_0
+\]
+
+we want to obtain a personalized model:
+
+\[
+M_p
+\]
+
+which generates a new concept while preserving the original model behavior.
+
+
+The challenge:
+
+\[
+M_p = M_0 + \Delta W
+\]
+
+where the update $\Delta W$ should introduce new knowledge without
+destroying existing information.
+
+
+\end{frame}
+
+
+%------------------------------------------------
+
+\begin{frame}{Related Approaches}
+
+
+\begin{columns}
+
+\begin{column}{0.5\textwidth}
+
+\begin{block}{DreamBooth}
+\begin{itemize}
+    \item Subject-driven generation
+    \item Full model fine-tuning
+    \item High personalization quality
+\end{itemize}
+\end{block}
+
+
+\begin{block}{LoRA}
+\begin{itemize}
+    \item Parameter-efficient adaptation
+    \item Low-rank updates
+    \item Faster training
+\end{itemize}
+\end{block}
+
+\end{column}
+
+
+\begin{column}{0.5\textwidth}
+
+\begin{block}{AlphaEdit}
+\begin{itemize}
+    \item Knowledge-preserving editing
+    \item Controlled parameter modification
+    \item Reduced interference
+\end{itemize}
+\end{block}
+
+\end{column}
+
+\end{columns}
+
+
+\end{frame}
+
+
+%------------------------------------------------
+
+\begin{frame}{Proposed Pipeline}
+
+
+\begin{enumerate}[1)]
+
+\item \textbf{LoRA personalization}
+
+Train Stable Diffusion on a small set of images.
+
+\vspace{0.2cm}
+
+\item \textbf{Attention extraction}
+
+Extract cross-attention key/value matrices.
+
+\vspace{0.2cm}
+
+\item \textbf{Representation analysis}
+
+Construct text embedding matrices:
+
+\begin{itemize}
+    \item identifier tokens
+    \item content words
+    \item all valid tokens
+\end{itemize}
+
+
+\item \textbf{AlphaEdit}
+
+Modify parameters with knowledge preservation constraints.
+
+
+\end{enumerate}
+
+
+\end{frame}
+
+
+%------------------------------------------------
+
+\begin{frame}{Experimental Setup}
+
+
+\begin{block}{Base Model}
+
+Stable Diffusion v1-4
+
+\end{block}
+
+
+\begin{block}{Personalization}
+
+DreamBooth LoRA
+
+\begin{itemize}
+    \item different identifier tokens
+    \item different learning rates
+    \item different checkpoints
+\end{itemize}
+
+\end{block}
+
+
+\begin{block}{Evaluation}
+
+Comparison of:
+
+\begin{itemize}
+    \item original model
+    \item LoRA model
+    \item AlphaEdit model
+\end{itemize}
+
+\end{block}
+
+
+\end{frame}
+
+
+%------------------------------------------------
+
+\begin{frame}{Experiments}
+
+
+\begin{columns}
+
+\begin{column}{0.5\textwidth}
+
+\begin{figure}
+
+\centering
+\includegraphics[width=0.8\textwidth]{example-image-a}
+
+\caption{LoRA generations}
+
+\end{figure}
+
+
+\end{column}
+
+
+\begin{column}{0.5\textwidth}
+
+
+\begin{figure}
+
+\centering
+\includegraphics[width=0.8\textwidth]{example-image-b}
+
+\caption{Edited model generations}
+
+\end{figure}
+
+
+\end{column}
+
+\end{columns}
+
+
+Experiments analyze:
+
+\begin{itemize}
+    \item concept similarity;
+    \item preservation of pretrained abilities;
+    \item influence of editing parameters.
+\end{itemize}
+
+
+\end{frame}
+
+
+%------------------------------------------------
+
+
+\begin{frame}{Ablation Studies}
+
+
+We investigate the influence of:
+
+
+\begin{enumerate}[1)]
+
+\item Identifier token selection
+
+\item LoRA learning rate
+
+\item Training checkpoint
+
+\item Text representation strategy
+
+\item Interpolation between models
+
+
+\end{enumerate}
+
+
+Interpolation:
+
+
+\[
+W(\alpha)=
+(1-\alpha)W_{AlphaEdit}
++\alpha W_{LoRA}
+\]
+
+
+\end{frame}
+
+
+%------------------------------------------------
+
+
+\begin{frame}{Discussion}
+
+
+Main observations:
+
+
+\begin{itemize}
+
+\item Personalized knowledge is distributed across multiple model components.
+
+\item Cross-attention key/value matrices contain important but incomplete
+information about the concept.
+
+\item Stronger personalization may increase interference with pretrained
+knowledge.
+
+\end{itemize}
+
+
+\end{frame}
+
+
+%------------------------------------------------
+
+
+\begin{frame}{Conclusion}
+
+
+\begin{enumerate}[1)]
+
+\item We study knowledge-preserving personalization of diffusion models.
+
+\item We combine DreamBooth LoRA with AlphaEdit-based editing.
+
+\item We analyze the role of cross-attention parameters in concept transfer.
+
+\item Experiments reveal limitations of editing only a subset of model
+parameters.
+
+\end{enumerate}
+
+
+\end{frame}
+
+
+\end{document}

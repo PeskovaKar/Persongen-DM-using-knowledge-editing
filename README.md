@@ -1,20 +1,20 @@
-# PersonGen: Knowledge-Preserving Personalization of Diffusion Models
+# Personalization and Concept Editing of Text-to-Image Diffusion Models
 
 [![License](https://badgen.net/github/license/kisnikser/m1p-template?color=green)](LICENSE)
 
 <table>
-    <tr>
-        <td align="left"> <b> Author </b> </td>
-        <td> Karina Peskova </td>
-    </tr>
-    <tr>
-        <td align="left"> <b> Consultant </b> </td>
-        <td> Sergey Karpukhin </td>
-    </tr>
-    <tr>
-        <td align="left"> <b> Advisor </b> </td>
-        <td> Aibek Alanov </td>
-    </tr>
+<tr>
+<td><b>Author</b></td>
+<td>Karina Peskova</td>
+</tr>
+<tr>
+<td><b>Consultant</b></td>
+<td>TODO</td>
+</tr>
+<tr>
+<td><b>Advisor</b></td>
+<td>TODO</td>
+</tr>
 </table>
 
 ## Assets
@@ -26,46 +26,60 @@
 
 ## Abstract
 
-This research project studies personalization and concept editing of
-text-to-image diffusion models.
+This research project studies personalization and concept editing of text-to-image
+diffusion models.
 
-The goal of the work is to investigate how a pretrained diffusion model
-can learn new visual concepts while preserving previously acquired knowledge.
+The main goal is to investigate how a pretrained diffusion model can be adapted
+to generate a new visual concept while preserving previously learned knowledge.
 
-We combine DreamBooth LoRA personalization with AlphaEdit-based editing
-methods and analyze the role of cross-attention parameters in concept transfer.
+The project combines DreamBooth LoRA personalization with AlphaEdit-based model
+editing methods. We analyze the role of cross-attention layers and study whether
+key/value attention parameters contain sufficient information for transferring
+personalized concepts.
 
 ## Research Questions
 
-- How is personalized concept information stored inside diffusion models?
-- Can editing methods preserve pretrained model knowledge after personalization?
-- Are cross-attention key/value matrices sufficient for concept transfer?
+- How is personalized concept information represented inside diffusion models?
+- Can model editing methods preserve the original model knowledge after personalization?
+- What is the contribution of cross-attention key/value matrices to concept transfer?
+- How do training parameters influence personalization quality?
 
 ## Method
 
-The proposed pipeline includes:
+The experimental pipeline consists of:
 
-1. DreamBooth LoRA fine-tuning of Stable Diffusion.
-2. Extraction of cross-attention key/value matrices.
-3. Construction of concept embedding representations.
-4. AlphaEdit-based model editing.
-5. Evaluation of generated images and preservation of original capabilities.
+1. Fine-tuning Stable Diffusion using DreamBooth LoRA.
+2. Extracting cross-attention parameters from the personalized model.
+3. Constructing text embedding representations of original and personalized concepts.
+4. Applying AlphaEdit-style constrained editing.
+5. Comparing generation quality and concept preservation.
 
 ## Experiments
 
-Experiments include:
+The project includes experiments with:
 
 - different textual identifiers;
-- LoRA training checkpoints;
-- learning rate selection;
-- AlphaEdit parameters;
+- LoRA checkpoints;
+- learning rates;
+- editing parameters;
 - interpolation between LoRA and edited weights.
+
+Evaluation focuses on:
+
+- similarity of generated images to the target concept;
+- preservation of pretrained generation abilities;
+- influence of editing on model behavior.
 
 ## Citation
 
 ```bibtex
-@article{peskova2026personalization,
-  title={PersonGen: Knowledge-Preserving Personalization of Diffusion Models},
+@article{peskova2026personalgen,
+  title={Personalization and Concept Editing of Text-to-Image Diffusion Models},
   author={Karina Peskova},
   year={2026}
 }
+```
+
+## Licence
+
+MIT License.
